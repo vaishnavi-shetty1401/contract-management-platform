@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useContracts } from "../context/ContractContext";
 import type { Contract } from "../models/contract";
 
@@ -26,3 +27,28 @@ export default function ContractList() {
   );
 }
 
+=======
+import React from "react";
+import { useContracts } from "../context/ContractContext";
+
+const ContractList: React.FC = () => {
+  const { contracts, setActiveContract } = useContracts();
+
+  return (
+    <div>
+      <h3>Contracts</h3>
+      <ul>
+        {contracts.map((c) => (
+          <li key={c.id}>
+            <button onClick={() => setActiveContract(c.id)}>
+              {c.name}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default ContractList;
+>>>>>>> 01cd8d5 (Initial commit: Contract Management Platform)
