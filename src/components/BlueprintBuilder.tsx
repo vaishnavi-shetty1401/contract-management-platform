@@ -1,63 +1,42 @@
-<<<<<<< HEAD
-export default function BlueprintBuilder() {
-  return <h2>Create Blueprint (Mocked UI)</h2>;
-}
-=======
-import React, { useState } from "react";
+import { useState } from "react";
 import { useBlueprints } from "../context/BlueprintContext";
-import { Field } from "../models/blueprint";
+import { v4 as uuid } from "uuid";
 
-const BlueprintBuilder: React.FC = () => {
+export default function BlueprintBuilder() {
   const { addBlueprint } = useBlueprints();
   const [name, setName] = useState("");
-  const [fields, setFields] = useState<Field[]>([]);
+  const [fields, setFields] = useState<any[]>([]);
 
-  const addField = () => {
-    setFields((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        label: "New Field",
-        type: "text",
-        x: 10,
-        y: 10,
-      },
-    ]);
+  const addField = (type: string) => {
+    setFields([...fields, { id: uuid(), label: "", type }]);
   };
 
-  const handleSubmit = () => {
-    if (!name) {
-      alert("Blueprint name is required");
-      return;
-    }
-
-    addBlueprint({ name, fields });
+  const save = () => {
+    addBlueprint({ id: uuid(), name, fields });
     setName("");
     setFields([]);
   };
 
   return (
     <div>
-      <h2>Create Blueprint</h2>
+      <h3>Create Blueprint</h3>
+      <input placeholder="Blueprint name" value={name} onChange={(e) => setName(e.target.value)} />
+      <br /><br />
+      <button onClick={() => addField("text")}>Text</button>
+      <button onClick={() => addField("date")}>Date</button>
+      <button onClick={() => addField("checkbox")}>Checkbox</button>
+      <button onClick={() => addField("signature")}>Signature</button>
 
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Blueprint Name"
-      />
+      {fields.map((f, i) => (
+        <input
+          key={f.id}
+          placeholder={`Field ${i + 1} label`}
+          onChange={(e) => (f.label = e.target.value)}
+        />
+      ))}
 
-      <button onClick={addField}>Add Field</button>
-
-      <ul>
-        {fields.map((f) => (
-          <li key={f.id}>{f.label}</li>
-        ))}
-      </ul>
-
-      <button onClick={handleSubmit}>Save Blueprint</button>
+      <br />
+      <button onClick={save}>Save Blueprint</button>
     </div>
   );
-};
-
-export default BlueprintBuilder;
->>>>>>> 01cd8d5 (Initial commit: Contract Management Platform)
+}
